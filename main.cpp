@@ -14,20 +14,21 @@
 #include "Stopwatch.h"
 #include <string>
 #include "XorList.cpp"
+#include "testing.cpp"
+#include <gtest/gtest.h>
 
 enum class OpType {push_b, push_f, pop_b, pop_f};
 
-struct operation {
-    OpType type;
-    int x = 0;
-};
 
 std::vector<operation> ops;
 
 
 
-int main(int argc, const char * argv[]) {
-    XorList<int, StackAllocator<int>> xlist;
+
+int main(int argc, char* argv[]) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+    /*XorList<int, StackAllocator<int>> xlist;
     xlist.push_back(1);
     xlist.push_back(2);
     xlist.push_back(3);
@@ -38,7 +39,7 @@ int main(int argc, const char * argv[]) {
     xlist.insert_after(it, 0);
     for (auto i = xlist.begin(); i != xlist.end(); i++) {
         std::cout << *i << std::endl;
-    }
+    }*/
     
     
     /*srand(0);
@@ -107,5 +108,4 @@ int main(int argc, const char * argv[]) {
     std::string s = "ಊಊಊಊಊಊಊಊಊ";
     std::cout << (int)(s[0]);
     std::cout << s;*/
-    return 0;
 }

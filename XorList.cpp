@@ -180,6 +180,50 @@ size_t XorList<T, allocator>::size() const {
     return _size;
 }
 
+template<class T, class allocator>
+void XorList<T, allocator>::clear() {
+    Node<T>* p1 = nullptr;
+    Node<T>* p2 = _begin;
+    while (p2 != nullptr) {
+        Node<T>* tmp = next(p1, p2);
+        p1 = p2;
+        _alloc.deallocate(p1, 1);
+        p2 = tmp;
+    }
+}
+
+template<class T, class allocator>
+void XorList<T, allocator>::erase(iterator it) {
+    Node<T>* nextNode = next(it._first, it._second);
+    if (nextNode != nullptr) {
+        nextNode->pointer = Xor(Xor(nextNode->pointer, it._second), it._first);
+    } else {
+        _end = it._first;
+    }
+    
+    if (it._first != nullptr) {
+        it._first->pointer = Xor(Xor(it._first->pointer, it._second), nextNode);
+    } else {
+        _begin = nextNode;
+    }
+    
+    _alloc.destroy(it._second);
+    _alloc.deallocate(it._second, 1);
+    --_size;
+}
+
+template<class T, class allocator>
+void XorList<T, allocator>::pop_front() {
+    erase(begin());
+}
+
+template<class T, class allocator>
+void XorList<T, allocator>::pop_back() {
+    auto it = end();
+    --it;
+    erase(it);
+}
+
 template <class T, class allocator>
 bool XorListIterator<T, allocator>::operator==(const XorListIterator<T, allocator>& other) const {
     return _first == other._first && _second == other._second;
