@@ -10,12 +10,12 @@
 
 void blockHolder::add(void* p) {
     if (_start == nullptr) {
-        _start = new block();
+        _start = (block*)(malloc(sizeof(block)));
         _start->memory_block = p;
         _start->next = nullptr;
         _current = _start;
     } else {
-        block* blck = new block();
+        block* blck = (block*)(malloc(sizeof(block)));
         blck->memory_block = p;
         blck->next = nullptr;
         _current->next = blck;
@@ -28,7 +28,7 @@ void blockHolder::delList(block* p) {
         if (p->next != nullptr) {
             delList(p->next);
         }
-        delete p;
+        free(p);
     }
 }
 

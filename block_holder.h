@@ -10,8 +10,8 @@
 #define block_holder_h
 
 struct block {
-    void* memory_block;
-    block* next;
+    void* memory_block = nullptr;
+    block* next = nullptr;
 };
 
 class blockHolder {
@@ -21,8 +21,8 @@ public:
     blockHolder() : _start(nullptr), _current(nullptr) {};
     ~blockHolder();
 private:
-    block* _start;
-    block* _current;
+    block* _start = nullptr;
+    block* _current = nullptr;
     void delList(block* p);
     void free_blocks(block* p);
 };
