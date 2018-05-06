@@ -28,6 +28,8 @@ std::vector<operation> ops;
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
+    
+    
     /*XorList<int, StackAllocator<int>> xlist;
     xlist.push_back(1);
     xlist.push_back(2);

@@ -55,16 +55,16 @@ XorList<T, allocator>::~XorList() {
     while (p2 != nullptr) {
         Node<T>* tmp = next(p1, p2);
         p1 = p2;
-        _alloc.deallocate(p1, 1);
         p2 = tmp;
+        _alloc.destroy(p1);
+        _alloc.deallocate(p1, 1);
     }
 }
 
 template<class T, class allocator>
 void XorList<T, allocator>::push_back(const T& val) {
     Node<T>* obj = _alloc.allocate(1);
-    obj->value = val;
-    obj->pointer = nullptr;
+    _alloc.construct(obj, val);
     if (_end != nullptr) {
         _end->pointer = Xor(_end->pointer, obj);
         obj->pointer = _end;
@@ -78,8 +78,7 @@ void XorList<T, allocator>::push_back(const T& val) {
 template<class T, class allocator>
 void XorList<T, allocator>::push_back(T&& val) {
     Node<T>* obj = _alloc.allocate(1);
-    obj->value = std::move(val);
-    obj->pointer = nullptr;
+    _alloc.construct(obj, std::move(val));
     if (_end != nullptr) {
         _end->pointer = Xor(_end->pointer, obj);
         obj->pointer = _end;
@@ -187,8 +186,9 @@ void XorList<T, allocator>::clear() {
     while (p2 != nullptr) {
         Node<T>* tmp = next(p1, p2);
         p1 = p2;
-        _alloc.deallocate(p1, 1);
         p2 = tmp;
+        _alloc.destroy(p1);
+        _alloc.deallocate(p1, 1);
     }
 }
 

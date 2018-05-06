@@ -23,7 +23,7 @@ struct times {
     double list = 0, xorList = 0;
 };
 
-void checkLists(const XorList<int, StackAllocator<int>>& xlist, const std::list<int>& list) {
+void checkLists(const XorList<int>& xlist, const std::list<int>& list) {
     std::vector<int> first, second;
     ASSERT_EQ(xlist.size(), list.size());
     for (auto it = xlist.begin(); it != xlist.end(); it++) {
@@ -38,7 +38,7 @@ void checkLists(const XorList<int, StackAllocator<int>>& xlist, const std::list<
     }
 }
 
-void doOps(const std::vector<std::pair<operation, int>> ops, XorList<int, StackAllocator<int>>& xlist, std::list<int>& list) {
+void doOps(const std::vector<std::pair<operation, int>> ops, XorList<int>& xlist, std::list<int>& list) {
     Stopwatch stopwatch;
     stopwatch.start();
     times t;
@@ -69,20 +69,11 @@ void doOps(const std::vector<std::pair<operation, int>> ops, XorList<int, StackA
 }
 
 class simpleTests : public ::testing::Test {
-protected:
-    void SetUp() {
-        xlist.clear();
-        list.clear();
-    }
-    void TearDown() {
-        xlist.clear();
-        list.clear();
-    }
-    XorList<int, StackAllocator<int>> xlist;
-    std::list<int> list;
 };
 
 TEST_F(simpleTests, simplePushing1) {
+    XorList<int> xlist;
+    std::list<int> list;
     using std::make_pair;
     std::vector<std::pair<operation, int>> ops;
     ops.push_back(make_pair(operation::push_back, 1));
@@ -94,6 +85,8 @@ TEST_F(simpleTests, simplePushing1) {
 }
 
 TEST_F(simpleTests, simplePushing2) {
+    XorList<int> xlist;
+    std::list<int> list;
     using std::make_pair;
     std::vector<std::pair<operation, int>> ops;
     ops.push_back(make_pair(operation::push_front, 1));
@@ -105,6 +98,8 @@ TEST_F(simpleTests, simplePushing2) {
 }
 
 TEST_F(simpleTests, simplePushing3) {
+    XorList<int> xlist;
+    std::list<int> list;
     using std::make_pair;
     std::vector<std::pair<operation, int>> ops;
     ops.push_back(make_pair(operation::push_front, 1));
@@ -116,6 +111,8 @@ TEST_F(simpleTests, simplePushing3) {
 }
 
 TEST_F(simpleTests, simplePoping1) {
+    XorList<int> xlist;
+    std::list<int> list;
     using std::make_pair;
     std::vector<std::pair<operation, int>> ops;
     ops.push_back(make_pair(operation::push_back, 1));
@@ -133,6 +130,8 @@ TEST_F(simpleTests, simplePoping1) {
 }
 
 TEST_F(simpleTests, simplePoping2) {
+    XorList<int> xlist;
+    std::list<int> list;
     using std::make_pair;
     std::vector<std::pair<operation, int>> ops;
     ops.push_back(make_pair(operation::push_back, 1));
@@ -150,6 +149,8 @@ TEST_F(simpleTests, simplePoping2) {
 }
 
 TEST_F(simpleTests, simplePoping3) {
+    XorList<int> xlist;
+    std::list<int> list;
     using std::make_pair;
     std::vector<std::pair<operation, int>> ops;
     ops.push_back(make_pair(operation::push_back, 1));

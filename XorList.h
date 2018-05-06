@@ -18,8 +18,11 @@ class XorListIterator;
 template<class T>
 struct Node {
     T value;
-    Node<T>* pointer;
+    Node<T>* pointer = nullptr;
+    template <typename U>
+    explicit Node(U&& val): value(std::forward<U>(val)){}
 };
+
 
 template<class T, class allocator = std::allocator<T>>
 class XorList {
