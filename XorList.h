@@ -39,14 +39,9 @@ public:
     size_t size() const;
     void clear();
     
-    //lvalue-reference methods
-    //void push_back(const T& val);
-    //void push_front(const T& val);
-    //void insert_before(iterator&, const T& val);
-    //void insert_after(iterator&, const T& val);
     void erase(iterator it);
     
-    //rvalue-reference methods
+    //universal-reference methods
     template<class U>
     void push_back(U&& val);
     template<class U>
