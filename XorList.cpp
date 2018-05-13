@@ -61,102 +61,123 @@ XorList<T, allocator>::~XorList() {
     }
 }
 
+/*template<class T, class allocator>
+ void XorList<T, allocator>::push_back(const T& val) {
+ Node<T>* obj = _alloc.allocate(1);
+ _alloc.construct(obj, val);
+ if (_end != nullptr) {
+ _end->pointer = Xor(_end->pointer, obj);
+ obj->pointer = _end;
+ _end = obj;
+ } else {
+ _begin = _end = obj;
+ }
+ ++_size;
+ }*/
+
 template<class T, class allocator>
-void XorList<T, allocator>::push_back(const T& val) {
-    Node<T>* obj = _alloc.allocate(1);
-    _alloc.construct(obj, val);
-    if (_end != nullptr) {
-        _end->pointer = Xor(_end->pointer, obj);
-        obj->pointer = _end;
-        _end = obj;
-    } else {
-        _begin = _end = obj;
-    }
-    ++_size;
+template<class U>
+void XorList<T, allocator>::push_back(U&& val) {
+    /*Node<T>* obj = _alloc.allocate(1);
+     _alloc.construct(obj, std::move(val));
+     if (_end != nullptr) {
+     _end->pointer = Xor(_end->pointer, obj);
+     obj->pointer = _end;
+     _end = obj;
+     } else {
+     _begin = obj;
+     _end = _begin;
+     }
+     ++_size;*/
+    iterator it = end();
+    insert_before(it, std::forward<U>(val));
+}
+
+/*template<class T, class allocator>
+ void XorList<T, allocator>::push_front(const T& val) {
+ Node<T>* obj = _alloc.allocate(1);
+ _alloc.construct(obj, std::move(val));
+ if (_begin != nullptr) {
+ _begin->pointer = Xor(_begin->pointer, obj);
+ obj->pointer = _begin;
+ _begin = obj;
+ } else {
+ _begin = obj;
+ _end = _begin;
+ }
+ ++_size;
+ }*/
+
+template<class T, class allocator>
+template<class U>
+void XorList<T, allocator>::push_front(U&& val) {
+    /*Node<T>* obj = _alloc.allocate(1);
+     _alloc.construct(obj, std::move(val));
+     if (_begin != nullptr) {
+     _begin->pointer = Xor(_begin->pointer, obj);
+     obj->pointer = _begin;
+     _begin = obj;
+     } else {
+     _begin = obj;
+     _end = _begin;
+     }
+     ++_size;*/
+    iterator it = begin();
+    insert_before(it, std::forward<U>(val));
 }
 
 template<class T, class allocator>
-void XorList<T, allocator>::push_back(T&& val) {
+template<class U>
+void XorList<T, allocator>::insert_before(iterator& it, U&& val) {
     Node<T>* obj = _alloc.allocate(1);
     _alloc.construct(obj, std::move(val));
-    if (_end != nullptr) {
-        _end->pointer = Xor(_end->pointer, obj);
-        obj->pointer = _end;
-        _end = obj;
-    } else {
-        _begin = obj;
-        _end = _begin;
-    }
-    ++_size;
-}
-
-template<class T, class allocator>
-void XorList<T, allocator>::push_front(const T& val) {
-    Node<T>* obj = _alloc.allocate(1);
-    obj->value = val;
-    obj->pointer = nullptr;
-    if (_begin != nullptr) {
-        _begin->pointer = Xor(_begin->pointer, obj);
-        obj->pointer = _begin;
-        _begin = obj;
-    } else {
-        _begin = obj;
-        _end = _begin;
-    }
-    ++_size;
-}
-
-template<class T, class allocator>
-void XorList<T, allocator>::push_front(T&& val) {
-    Node<T>* obj = _alloc.allocate(1);
-    obj->value = std::move(val);
-    obj->pointer = nullptr;
-    if (_begin != nullptr) {
-        _begin->pointer = Xor(_begin->pointer, obj);
-        obj->pointer = _begin;
-        _begin = obj;
-    } else {
-        _begin = obj;
-        _end = _begin;
-    }
-    ++_size;
-}
-
-template<class T, class allocator>
-void XorList<T, allocator>::insert_before(iterator& it, T&& val) {
-    Node<T>* obj = _alloc.allocate(1);
-    obj->value = std::move(val);
     obj->pointer = Xor(it._first, it._second);
-    it._second->pointer = Xor(Xor(it._second->pointer, obj), it._first);
-    it._first->pointer = Xor(Xor(it._first->pointer, obj), it._second);
-    it._first = obj;
+    if (_begin != nullptr) {
+        if (it == begin()) {
+            _begin->pointer = Xor(_begin->pointer, obj);
+            obj->pointer = _begin;
+            _begin = obj;
+        } else if (it == end()) {
+            _end->pointer = Xor(_end->pointer, obj);
+            obj->pointer = _end;
+            _end = obj;
+        } else {
+            it._second->pointer = Xor(Xor(it._second->pointer, obj), it._first);
+            it._first->pointer = Xor(Xor(it._first->pointer, obj), it._second);
+            it._first = obj;
+        }
+    } else {
+        _begin = obj;
+        _end = _begin;
+    }
     ++_size;
 }
 
 template<class T, class allocator>
-void XorList<T, allocator>::insert_after(iterator& it, T&& val) {
+template<class U>
+void XorList<T, allocator>::insert_after(iterator& it, U&& val) {
     ++it;
-    insert_before(it, std::forward<T>(val));
+    insert_before(it, std::forward<U>(val));
     --it;
 }
 
-template<class T, class allocator>
-void XorList<T, allocator>::insert_before(iterator& it, const T& val) {
-    Node<T>* obj = _alloc.allocate(1);
-    obj->value = val;
-    obj->pointer = Xor(it._first, it._second);
-    it._second->pointer = Xor(Xor(it._second->pointer, obj), it._first);
-    it._first->pointer = Xor(Xor(it._first->pointer, obj), it._second);
-    it._first = obj;
-    ++_size;
-}
-
-template<class T, class allocator>
-void XorList<T, allocator>::insert_after(iterator& it, const T& val) {
-    ++it;
-    insert_before(it, val);
-    --it;
-}
+/*template<class T, class allocator>
+ void XorList<T, allocator>::insert_before(iterator& it, const T& val) {
+ Node<T>* obj = _alloc.allocate(1);
+ _alloc.construct(obj, val);
+ obj->pointer = Xor(it._first, it._second);
+ it._second->pointer = Xor(Xor(it._second->pointer, obj), it._first);
+ it._first->pointer = Xor(Xor(it._first->pointer, obj), it._second);
+ it._first = obj;
+ ++_size;
+ }
+ 
+ template<class T, class allocator>
+ void XorList<T, allocator>::insert_after(iterator& it, const T& val) {
+ ++it;
+ insert_before(it, val);
+ --it;
+ }*/
 
 template<class T, class allocator>
 XorListIterator<T, allocator> XorList<T, allocator>::begin() const{

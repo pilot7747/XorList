@@ -40,17 +40,22 @@ public:
     void clear();
     
     //lvalue-reference methods
-    void push_back(const T& val);
-    void push_front(const T& val);
-    void insert_before(iterator&, const T& val);
-    void insert_after(iterator&, const T& val);
+    //void push_back(const T& val);
+    //void push_front(const T& val);
+    //void insert_before(iterator&, const T& val);
+    //void insert_after(iterator&, const T& val);
     void erase(iterator it);
     
     //rvalue-reference methods
-    void push_back(T&& val);
-    void push_front(T&& val);
-    void insert_before(iterator&, T&& val);
-    void insert_after(iterator&, T&& val);
+    template<class U>
+    void push_back(U&& val);
+    template<class U>
+    void push_front(U&& val);
+    
+    template<class U>
+    void insert_before(iterator&, U&& val);
+    template<class U>
+    void insert_after(iterator&, U&& val);
     
     //pops
     void pop_back();

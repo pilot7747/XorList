@@ -166,3 +166,18 @@ TEST_F(simpleTests, simplePoping3) {
     ops.push_back(make_pair(operation::pop_front, 0));
     doOps(ops, xlist, list);
 }
+
+/*TEST_F(simpleTests, alloc) {
+    Stopwatch s;
+    std::list<int, StackAllocator<int>> xlist;
+    std::list<int> list;
+    s.start();
+    for (int i = 0; i < 10000; ++i) {
+        list.push_back(1);
+    }
+    std::cout << s.circle() << std::endl;
+    for (int i = 0; i < 10000; ++i) {
+        xlist.push_back(1);
+    }
+    std::cout << s.circle() << std::endl;
+}*/

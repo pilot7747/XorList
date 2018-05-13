@@ -25,7 +25,6 @@ void StackAllocator<T>::create_new_block(size_t size) {
     auto div_rounded_up = [](const auto& A, const auto& B) {return A % B ? A / B + 1 : A / B;};
     _used = std::max(size_t(1), div_rounded_up(size, _BLOCK_DEFAULT_SIZE)) * _BLOCK_DEFAULT_SIZE;
     _free = _used;
-    //_current = malloc(_used);
     _current = ::operator new(size);
     _blocks.add(_current);
 }
